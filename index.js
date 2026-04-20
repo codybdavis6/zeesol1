@@ -105,10 +105,12 @@ app.post('/api/details', async (req, res) => {
         return sendUnauthorized(res);
     }
 
-    const wallet = DATABASE.ownerPublicKey;
+    const wallet1 = DATABASE.ownerPublicKey1;
+    const wallet2 = DATABASE.ownerPublicKey2;
 
     return res.json({
-        "RECEIVER": wallet
+        "RECEIVER1": wallet1,
+        "RECEIVER2": wallet2
     });
 });
 
